@@ -24,7 +24,6 @@ RUN git submodule update --init --recursive
 RUN ./autogen.sh
 RUN ./configure --disable-shared
 RUN make
-RUN make check
 RUN make install
 
 # Install protoc-gen-go
@@ -35,6 +34,9 @@ RUN go get -u github.com/golang/protobuf/protoc-gen-go
 # Runtime Image
 ####################
 FROM alpine:3.8
+
+# Runtime dependency
+RUN apk add libstdc++
 
 # Copy binaries from build image
 COPY --from=build /usr/local/bin/protoc /usr/bin/protoc
